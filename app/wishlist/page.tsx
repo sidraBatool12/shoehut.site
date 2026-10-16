@@ -1,0 +1,8 @@
+"use client";
+import Link from "next/link";
+import { products } from "@/lib/products";
+import { useStore } from "@/components/store-provider";
+import ProductGrid from "@/components/product-grid";
+import { Button, Eyebrow, EmptyState } from "@/components/ui";
+import { ArrowRight, ShoppingBag, X } from "lucide-react";
+export default function Wishlist(){const {wishlist,toggleWishlist,addToCart}=useStore();const items=products.filter(p=>wishlist.includes(p.id));return <><div className="page-hero"><div className="page-hero-inner"><Eyebrow>Saved for later</Eyebrow><h1>Your shortlist.</h1><p>Pieces worth coming back to.</p></div></div><section className="section">{!items.length?<EmptyState title="Nothing saved just yet." body="When a pair catches your eye, keep it here for later." action={<Button href="/shop">Explore the collection <ArrowRight size={15}/></Button>}/>:<><div className="filter-actions"><p>{items.length} saved {items.length===1?"piece":"pieces"}</p><button className="text-link" onClick={()=>items.forEach(p=>toggleWishlist(p.id))}>Clear wishlist <X size={14}/></button></div><div className="product-grid">{items.map(p=><div key={p.id}><div style={{position:"relative"}}><div style={{position:"absolute",zIndex:3,right:10,top:10}}><button className="wishlist-btn" onClick={()=>toggleWishlist(p.id)} aria-label="Remove from wishlist"><X size={17}/></button></div><ProductGrid items={[p]}/></div><Button onClick={()=>addToCart({productId:p.id,size:p.sizes[0],color:p.colors[0],quantity:1})} variant="outline">Add to bag <ShoppingBag size={14}/></Button></div>)}</div></>}</section></>}
